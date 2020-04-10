@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>用python内置服务器快速分享文件 | 朱文骁的博客</title>
+<title>语法糖（syntactic suger）–简书 | 朱文骁的博客</title>
 <link rel="shortcut icon" href="https://lucky-zwx.github.io//favicon.ico?v=1586507145809">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://lucky-zwx.github.io//styles/main.css">
@@ -87,27 +87,149 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    用python内置服务器快速分享文件
+                    语法糖（syntactic suger）–简书
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
                         · 2020-04-10 ·
                     </time>
                     
-                        <a href="https://lucky-zwx.github.io/tag/Fz7LmJSmH/" class="post-tags">
-                            # python
-                        </a>
-                    
-                        <a href="https://lucky-zwx.github.io/tag/oiVunfyfZ0/" class="post-tags">
-                            # 运维
+                        <a href="https://lucky-zwx.github.io/tag/BBm-0jnup/" class="post-tags">
+                            # 其他
                         </a>
                     
                 </div>
                 <div class="post-content">
-                    <p>python -m http.server</p>
-<p>用http://127.0.0.1:8000即可访问目录下内容</p>
-<p>或者加上端口号：python -m http.server  80</p>
-<p>用http://127.0.0.1即可访问目录下内容</p>
+                    <p>北风第一支关注2017.05.29 23:04* 字数 554 阅读 180评论 0喜欢 0<br>
+语法糖（Syntactic Sugar），也叫糖衣语法，是英国计算机科学家彼得·约翰·兰达(Peter J. Landin)发明的一个术语。指的是，在计算机语言中添加某种语法，这种语法能使程序员更方便的使用语言开发程序，同时增强程序代码的可读性，避免出错的机会；但是这种语法对语言的功能并没有影响。</p>
+<p>泛型<br>
+与C#中的泛型相比，Java的泛型可以算是“伪泛型”了。在C#中，不论是在程序源码中、在编译后的中间语言，还是在运行期泛型都是真实存在的。Java则不同，Java的泛型只在源代码存在，只供编辑器检查使用，编译后的字节码文件已擦除了泛型类型，同时在必要的地方插入了强制转型的代码。<br>
+源码:</p>
+<p>private void showLists(){<br>
+List<String> stringList = new ArrayList<String>();<br>
+stringList.add('oliver');<br>
+System.out.println(stringList.get(0));<br>
+}<br>
+编译后:</p>
+<pre><code>private void showLists() {
+    ArrayList stringList = new ArrayList();
+    stringList.add('oliver');
+    System.out.println((String)stringList.get(0));
+}
+</code></pre>
+<p>自动拆箱/装箱<br>
+自动拆箱/装箱是在编译期，依据代码的语法，决定是否进行拆箱和装箱动作。<br>
+装箱过程：把基本类型用它们对应的包装类型进行包装，使基本类型具有对象特征。<br>
+拆箱过程：与装箱过程相反，把包装类型转换成基本类型。<br>
+需要注意的是：包装类型的“==”运算在没有遇到算数运算符的情况下不会自动拆箱，而其包装类型的equals()方法不会处理数据类型转换：</p>
+<pre><code>public void packing(){
+    int a =2 ;
+    int b =2;
+    System.out.println( a ==b );
+}
+</code></pre>
+<p>==&gt;</p>
+<pre><code>public void packing() {
+    byte a = 2; //没有拆装箱
+    byte b = 2;
+    System.out.println(a == b);
+}
+</code></pre>
+<p>而：</p>
+<pre><code>public void packing(){
+    Integer a =2 ;
+    Integer b =2;
+    System.out.println( a ==b );
+}
+</code></pre>
+<p>==&gt;</p>
+<pre><code>public void packing() {
+    Integer a = Integer.valueOf(2); //自动装箱
+    Integer b = Integer.valueOf(2);
+    System.out.println(a == b);
+}
+</code></pre>
+<p>再;</p>
+<pre><code>public void packing(){
+    Long a =2L ;
+    long b =2L;
+    System.out.println( a + b );
+}
+</code></pre>
+<p>==&gt;</p>
+<pre><code>public void packing() {
+    Long a = Long.valueOf(2L); //自动装箱
+    long b = 2L;
+    System.out.println(a.longValue() + b); //自动拆箱
+}
+</code></pre>
+<p>注意:</p>
+<pre><code>public void intTransgfer(){
+    int a =2 ;
+    String a1 = a+'';
+    transfer0(a);
+    transfer1(a1);
+    System.out.println('now a is ' + a);
+    System.out.println('now a1 is ' + a1);
+}
+</code></pre>
+<p>private void  transfer0(int a ){<br>
+a = a +1 ;<br>
+System.out.println('transfered a is ' + a);<br>
+}<br>
+private void  transfer1(String  a ){<br>
+a = a +1 ;<br>
+System.out.println('transfered a1 is ' + a);<br>
+}<br>
+transfered a is 3<br>
+transfered a1 is 21<br>
+now a is 2<br>
+now a1 is 2<br>
+从上面看出，a和a1并没有发生改变，说明a和a1在内存中是常量不会改变的，除非return 重新指定引用地址。要么封装在一个对象中，依靠对象的引用地址来获取新值。</p>
+<p>循环历遍<br>
+public  void foreachs(){<br>
+List<Integer> list = new ArrayList<Integer>();<br>
+for(Integer num : list){<br>
+System.out.println(num);<br>
+}<br>
+}<br>
+==&gt;</p>
+<pre><code>public void foreachs() {
+    ArrayList list = new ArrayList();
+    Iterator var2 = list.iterator();
+    while(var2.hasNext()) {
+        Integer num = (Integer)var2.next();
+        System.out.println(num);
+    }
+}
+</code></pre>
+<p>条件语句<br>
+public  void ifs(){<br>
+if(true){ //永真<br>
+System.out.println('oliver');<br>
+}else{<br>
+System.out.println('lee');<br>
+}<br>
+}<br>
+==&gt;</p>
+<pre><code>public void ifs() {
+    System.out.println('oliver');
+}
+</code></pre>
+<p>在编译器中，将会把分支不成立的代码消除</p>
+<p>枚举<br>
+public enum EnumTest {<br>
+OLIVER,LEE;<br>
+}<br>
+==&gt;</p>
+<p>public enum EnumTest {<br>
+OLIVER,<br>
+LEE;<br>
+private EnumTest() { //添加了构造方法<br>
+}<br>
+}<br>
+内部类<br>
+在jdk8 无特征..</p>
 
                 </div>
             </article>
@@ -116,8 +238,8 @@
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://lucky-zwx.github.io/post/go-yu-yan-shi-xian-er-cha-shu/" class="post-title gt-a-link">
-                    go语言实现--二叉树
+                <a href="https://lucky-zwx.github.io/post/docker-da-jian-redis-ji-qun-zui-xin-xiu-gai/" class="post-title gt-a-link">
+                    docker搭建redis集群(最新修改)
                 </a>
             </div>
         
