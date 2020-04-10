@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>朱文骁的博客</title>
+<title>Docker部署Golang | 朱文骁的博客</title>
 <link rel="shortcut icon" href="https://lucky-zwx.github.io//favicon.ico?v=1586507038404">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://lucky-zwx.github.io//styles/main.css">
@@ -30,11 +30,11 @@
 
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -83,28 +83,119 @@
         </div>
     </div>
 </nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Docker部署Golang
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-10 ·
+                    </time>
+                    
+                        <a href="https://lucky-zwx.github.io/tag/6A00XpN6W/" class="post-tags">
+                            # go
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <ol>
+<li>
+<p>安装docker</p>
+</li>
+<li>
+<p>mkdir myDocker</p>
+</li>
+<li>
+<p>cd myDocker &amp;&amp; touch Dockerfile</p>
+</li>
+<li>
+<p>Dockerfile写入</p>
+</li>
+</ol>
+<h1 id="将golang环境作为父镜像">将golang环境作为父镜像</h1>
+<pre><code class="language-dockerfile">FROM golang
 
-        <div class="tags-container">
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/qU5dGWy2W/">#docker</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/oiVunfyfZ0/">#运维</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/6A00XpN6W/">#go</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/bCiX9tfFu/">#mysql</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/Fz7LmJSmH/">#python</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/e_P4tyVUr/">#个人介绍</a>
-            
+MAINTAINER Razil &quot;zc6496359&quot;
+
+WORKDIR $GOPATH/src/godocker
+
+ADD . $GOPATH/src/godocker
+
+RUN go build main.go
+
+EXPOSE 8080
+
+ENTRYPOINT [&quot;./main&quot;]
+</code></pre>
+<p>FROM -&gt; 母镜像</p>
+<p>MAINTAINER -&gt; 维护者信息</p>
+<p>WORKDIR -&gt; 工作目录</p>
+<p>ADD -&gt; 将文件复制到镜像中</p>
+<p>RUN -&gt; 执行操作（就跟在终端执行语句一样）</p>
+<p>EXPOSE -&gt; 暴露端口</p>
+<p>ENTRYPOINT -&gt; 程序入口<br>
+5.   编写main.go 文件 放在myDocker下</p>
+<ol start="6">
+<li>构建镜像</li>
+</ol>
+<p>docker build -t zcdocker .</p>
+<p>出现Successfully build …</p>
+<p>说明构成成功。</p>
+<ol start="7">
+<li>
+<p>docker images 查看创建的镜像</p>
+</li>
+<li>
+<p>docker run -p 8080:8080 -d zcdocker</p>
+</li>
+</ol>
+<p>-p   本机端口:镜像端口</p>
+<p>-d    后台运行</p>
+<ol start="9">
+<li>本机访问 localhost:8080/zc 返回Hello Docker Form Golang!则成功</li>
+</ol>
+<p>main.go 内容如下</p>
+<pre><code class="language-go">package main
+
+import(
+
+    &quot;net/http&quot;
+
+    &quot;fmt&quot;
+
+)
+
+func main() {
+
+    http.HandleFunc(&quot;/zc&quot;,hello)
+
+    http.ListenAndServe(&quot;:8080&quot;,nil)
+
+}
+
+func hello(w http.ResponseWriter, r *http.Request) {
+
+    fmt.Fprintf(w,&quot;Hello Docker Form Golang!&quot;)
+
+}
+</code></pre>
+
+                </div>
+            </article>
         </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://lucky-zwx.github.io/post/mysql-zhu-cong-fu-zhi/" class="post-title gt-a-link">
+                    Mysql 主从复制
+                </a>
+            </div>
+        
+
+        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first">走远路，见微光</div>
@@ -139,6 +230,7 @@
 <script>
     hljs.initHighlightingOnLoad()
 </script>
+
 
     </div>
 </div>

@@ -1,0 +1,352 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>go语言实现--二叉树 | 朱文骁的博客</title>
+<link rel="shortcut icon" href="https://lucky-zwx.github.io//favicon.ico?v=1586507038404">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://lucky-zwx.github.io//styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            朱文骁的博客
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/guan-yu/" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    go语言实现--二叉树
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-10 ·
+                    </time>
+                    
+                        <a href="https://lucky-zwx.github.io/tag/6A00XpN6W/" class="post-tags">
+                            # go
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>二叉树是每个结点最多有两个子树的树结构。通常子树被称作“左子树”（left subtree）和“右子树”（right subtree）。二叉树常被用于实现二叉查找树和二叉堆。<br>
+二叉树的每个结点至多只有二棵子树(不存在度大于2的结点)，二叉树的子树有左右之分，次序不能颠倒。二叉树的第i层至多有 2^{i-1} 个结点；深度为k的二叉树至多有2^k-1个结点；对任何一棵二叉树T，如果其终端结点数为n_0，度为2的结点数为n_2，则n_0=n_2+1（百度百科）。</p>
+<p>二叉树有多种：</p>
+<p>(1)完全二叉树——叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大，这种二叉树叫作完全二叉树。<br>
+(2)满二叉树——叶子节点全都在最底层，除了叶子节点之外，每个节点都有左右两个子节点，这种二叉树就叫作满二叉树，他是一种特殊的完全二叉树。<br>
+(3)平衡二叉树——平衡二叉树又被称为AVL树（区别于AVL算法），它是一棵二叉排序树，且具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。</p>
+<p>一般二叉树性质：<br>
+性质1：二叉树第i层上的结点数目最多为 2^{i-1} (i≥1)。<br>
+性质2：深度为k的二叉树至多有2^{k}-1个结点(k≥1)。<br>
+性质3：包含n个结点的二叉树的高度至少为log2 (n+1)。<br>
+性质4：在任意一棵二叉树中，若终端结点的个数为n0，度为2的结点数为n2，则n0=n2+1。</p>
+<p>完全二叉树性质:</p>
+<p>具有n个节点的完全二叉树的高度k为[log2n]+1<br>
+对于具有n个节点的完全二叉树,如果按照从上(根节点)到下(叶节点)和从左到右的顺序对二叉树中的所有节点从0开始到n-1进行编号,则对于任意的下标为k的节点，有：<br>
+• 如果k=0,则它是根节点，它没有父节点；如果k&gt;0,则它的父节点的下标为[(i-1)/2];<br>
+• 如果2k+1 &lt;= n-1,则下标为k的节点的左子结点的下标为2k+1;否则,下标为k的节点没有左子结点.<br>
+• 如果2k+2 &lt;= n-1,则下标为k的节点的右子节点的下标为2k+2;否则,下标为k的节点没有右子节点<br>
+满二叉树性质:<br>
+在满二叉树中，叶节点的个数比分支节点的个数多1</p>
+<p>二叉查找树:<br>
+也称为二叉搜索树、有序二叉树（ordered binary tree）或排序二叉树（sorted binary tree），是指一棵空树或者具有下列性质的二叉树：</p>
+<p>若任意节点的左子树不空，则左子树上所有节点的值均小于它的根节点的值；<br>
+若任意节点的右子树不空，则右子树上所有节点的值均大于它的根节点的值；<br>
+任意节点的左、右子树也分别为二叉查找树；<br>
+没有键值相等的节点。</p>
+<p>二叉树遍历</p>
+<p>1、前序遍历（与树的前序遍历一样）<br>
+基本思想：先访问当前结点，再前序遍历左子树，最后再前序遍历右子树即根—左—右。<br>
+图中前序遍历结果是：1，2，4，5，7，8，3，6<br>
+2、中序遍历<br>
+基本思想：先中序遍历左子树，然后再访问当前结点，最后再中序遍历右子树即左—根—右。<br>
+图中中序遍历结果是：4，2，7，8，5，1，3，6<br>
+3、后序遍历<br>
+基本思想：先后序遍历左子树，然后再后序遍历右子树，最后再访问当前结点即左—右—根。<br>
+图中后序遍历结果是：4，8，7，5，2，6，3，1<br>
+4、层次遍历（与树的层次遍历一样）<br>
+基本思想：从第一层开始，依此遍历每层，直到结束。<br>
+图中层次遍历结果是：1，2，3，4，5，6，7，8</p>
+<p>例子：</p>
+<p>对上图的二叉树遍历做一个go语言的实现，代码如下：</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+type Node struct {
+	Value       int
+	Left, Right *Node
+}
+
+func (node *Node) Print() {
+	fmt.Print(node.Value, &quot; &quot;)
+}
+
+func (node *Node) SetValue(v int) {
+	if node == nil {
+		fmt.Println(&quot;setting value to nil.node ignored.&quot;)
+		return
+	}
+	node.Value = v
+}
+
+//前序遍历
+func (node *Node) PreOrder() {
+	if node == nil {
+		return
+	}
+	node.Print()
+	node.Left.PreOrder()
+	node.Right.PreOrder()
+}
+
+//中序遍历
+func (node *Node) MiddleOrder() {
+	if node == nil {
+		return
+	}
+	node.Left.MiddleOrder()
+	node.Print()
+	node.Right.MiddleOrder()
+}
+
+//后序遍历
+func (node *Node) PostOrder() {
+	if node == nil {
+		return
+	}
+	node.Left.PostOrder()
+	node.Right.PostOrder()
+	node.Print()
+}
+
+//层次遍历(广度优先遍历)
+func (node *Node) BreadthFirstSearch() {
+	if node == nil {
+		return
+	}
+	result := []int{}
+	nodes := []*Node{node}
+	for len(nodes) &gt; 0 {
+		curNode := nodes[0]
+		nodes = nodes[1:]
+		result = append(result, curNode.Value)
+		if curNode.Left != nil {
+			nodes = append(nodes, curNode.Left)
+		}
+		if curNode.Right != nil {
+			nodes = append(nodes, curNode.Right)
+		}
+	}
+	for _, v := range result {
+		fmt.Print(v, &quot; &quot;)
+	}
+}
+
+//层数(递归实现)
+//对任意一个子树的根节点来说，它的深度=左右子树深度的最大值+1
+func (node *Node) Layers() int {
+	if node == nil {
+		return 0
+	}
+	leftLayers := node.Left.Layers()
+	rightLayers := node.Right.Layers()
+	if leftLayers &gt; rightLayers {
+		return leftLayers + 1
+	} else {
+		return rightLayers + 1
+	}
+}
+
+//层数(非递归实现)
+//借助队列，在进行按层遍历时，记录遍历的层数即可
+func (node *Node) LayersByQueue() int {
+	if node == nil {
+		return 0
+	}
+	layers := 0
+	nodes := []*Node{node}
+	for len(nodes) &gt; 0 {
+		layers++
+		size := len(nodes) //每层的节点数
+		count := 0
+		for count &lt; size {
+			count++
+			curNode := nodes[0]
+			nodes = nodes[1:]
+			if curNode.Left != nil {
+				nodes = append(nodes, curNode.Left)
+			}
+			if curNode.Right != nil {
+				nodes = append(nodes, curNode.Right)
+			}
+		}
+	}
+	return layers
+}
+
+func CreateNode(v int) *Node {
+	return &amp;Node{Value: v}
+}
+
+func main() {
+	root := Node{Value: 3}
+	root.Left = &amp;Node{}
+	root.Left.SetValue(0)
+	root.Left.Right = CreateNode(2)
+	root.Right = &amp;Node{5, nil, nil}
+	root.Right.Left = CreateNode(4)
+
+	fmt.Print(&quot;\n前序遍历: &quot;)
+	root.PreOrder()
+	fmt.Print(&quot;\n中序遍历: &quot;)
+	root.MiddleOrder()
+	fmt.Print(&quot;\n后序遍历: &quot;)
+	root.PostOrder()
+	fmt.Print(&quot;\n层次遍历: &quot;)
+	root.BreadthFirstSearch()
+	fmt.Println(&quot;\n层数: &quot;, root.Layers())
+	fmt.Println(&quot;\n层数: &quot;, root.LayersByQueue())}
+}
+</code></pre>
+<p>————————————————<br>
+版权声明：本文为CSDN博主「米兰的小铁匠1943」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>
+原文链接：https://blog.csdn.net/tuobicui6522/article/details/80502130</p>
+<p>运行结果：</p>
+<p>前序遍历: 3 0 2 5 4<br>
+中序遍历: 0 2 3 4 5<br>
+后序遍历: 2 0 4 5 3<br>
+层次遍历: 3 0 5 2 4<br>
+层数: 3<br>
+层数: 3<br>
+————————————————<br>
+版权声明：本文为CSDN博主「米兰的小铁匠1943」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>
+原文链接：https://blog.csdn.net/tuobicui6522/article/details/80502130</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://lucky-zwx.github.io/post/guan-yu/" class="post-title gt-a-link">
+                    关于
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">走远路，见微光</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/lucky-zwx" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        不要再看下面了!🐷
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://lucky-zwx.github.io//atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

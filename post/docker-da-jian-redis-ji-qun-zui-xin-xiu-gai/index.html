@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>朱文骁的博客</title>
+<title>docker搭建redis集群(最新修改) | 朱文骁的博客</title>
 <link rel="shortcut icon" href="https://lucky-zwx.github.io//favicon.ico?v=1586507038404">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://lucky-zwx.github.io//styles/main.css">
@@ -30,11 +30,11 @@
 
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -83,28 +83,104 @@
         </div>
     </div>
 </nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    docker搭建redis集群(最新修改)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-10 ·
+                    </time>
+                    
+                        <a href="https://lucky-zwx.github.io/tag/qU5dGWy2W/" class="post-tags">
+                            # docker
+                        </a>
+                    
+                        <a href="https://lucky-zwx.github.io/tag/oiVunfyfZ0/" class="post-tags">
+                            # 运维
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <pre><code class="language-docker">docker pull redis
+# 在 /home 目录下创建redis-cluster-test 文件夹
+➜ mkdir -p /home/redis-cluster-test
+➜ cd  /home/redis-cluster-test
+➜ vim redis-cluster.conf
 
-        <div class="tags-container">
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/qU5dGWy2W/">#docker</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/oiVunfyfZ0/">#运维</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/6A00XpN6W/">#go</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/bCiX9tfFu/">#mysql</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/Fz7LmJSmH/">#python</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://lucky-zwx.github.io/tag/e_P4tyVUr/">#个人介绍</a>
-            
+# 把下列信息写入redis-cluster.conf文件中
+  port ${PORT}
+  cluster-enabled yes
+  cluster-config-file nodes.conf
+  cluster-node-timeout 5000
+  appendonly yes
+
+# 在 /home/redis-cluster-test 目录下生成conf和data目录，并生成配置文件
+➜ for port in `seq 6380 6385`; do 
+    mkdir -p ./${port}/conf &amp;&amp; PORT=${port} envsubst &lt; ./redis-cluster.conf &gt; ./${port}/conf/redis.conf &amp;&amp; mkdir -p ./${port}/data;
+  done
+
+# tree命令查看目录(如果命令不存在，执行安装命令：yum -y install tree)
+➜ tree
+.
+├── 6380
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+├── 6381
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+├── 6382
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+├── 6383
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+├── 6384
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+├── 6385
+│   ├── conf
+│   │   └── redis.conf
+│   └── data
+└── redis-cluster.conf
+
+18 directories, 7 files
+
+# 创建6个redis容器
+➜ for port in `seq 6380 6385`; do 
+     docker run --net=host --name=redis-${port} -v `pwd`/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -d redis:latest redis-server /usr/local/etc/redis/redis.conf; 
+  done
+
+# 本人使用Debian系统
+
+➜ apt install redis
+
+# 启动集群
+
+➜ redis-cli --cluster create 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6382 127.0.0.1:6383 127.0.0.1:6384 127.0.0.1:6385 --cluster-replicas 1
+</code></pre>
+
+                </div>
+            </article>
         </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://lucky-zwx.github.io/post/docker-bu-shu-golang/" class="post-title gt-a-link">
+                    Docker部署Golang
+                </a>
+            </div>
+        
+
+        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first">走远路，见微光</div>
@@ -139,6 +215,7 @@
 <script>
     hljs.initHighlightingOnLoad()
 </script>
+
 
     </div>
 </div>
