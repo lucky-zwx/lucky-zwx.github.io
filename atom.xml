@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lucky-zwx.github.io/</id>
     <title>朱文骁的博客</title>
-    <updated>2020-04-10T08:30:30.324Z</updated>
+    <updated>2020-04-10T08:43:54.341Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lucky-zwx.github.io/"/>
     <link rel="self" href="https://lucky-zwx.github.io/atom.xml"/>
@@ -10,6 +10,17 @@
     <logo>https://lucky-zwx.github.io/images/avatar.png</logo>
     <icon>https://lucky-zwx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 朱文骁的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[世界上最好的赛车游戏]]></title>
+        <id>https://lucky-zwx.github.io/post/shi-jie-shang-zui-hao-de-sai-che-you-xi/</id>
+        <link href="https://lucky-zwx.github.io/post/shi-jie-shang-zui-hao-de-sai-che-you-xi/">
+        </link>
+        <updated>2020-04-10T08:34:55.000Z</updated>
+        <summary type="html"><![CDATA[<p>这里是一场永不落幕的嘉年华，在这里你可以成为你想成为的人，这已经不是你梦想中的假期，而是你梦想中的人生。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>这里是一场永不落幕的嘉年华，在这里你可以成为你想成为的人，这已经不是你梦想中的假期，而是你梦想中的人生。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[语法糖（syntactic suger）–简书]]></title>
         <id>https://lucky-zwx.github.io/post/yu-fa-tang-syntactic-suger-jian-shu/</id>
